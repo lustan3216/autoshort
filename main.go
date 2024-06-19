@@ -45,17 +45,20 @@ const (
 
 func main() {
 	mp4Url := createVideo()
-	description := inputData.Tags + "\n\n" + inputData.Desc
 
 	for {
 		if testVideoURL(mp4Url) {
-			//anotherMethod()
-			log.Println(mp4Url)
-			log.Println(description)
+			uploadToYoutube()
 			break // Exit the loop if the video is valid
 		}
 		time.Sleep(10 * time.Second)
 	}
+}
+
+func uploadToYoutube(mp4Url string) {
+	description := inputData.Tags + "\n\n" + inputData.Desc
+	log.Println(mp4Url)
+	log.Println(description)
 }
 
 func getTemplateID(storyCount int) string {
