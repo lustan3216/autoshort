@@ -53,8 +53,6 @@ func main() {
 			log.Println(mp4Url)
 			log.Println(description)
 			break // Exit the loop if the video is valid
-		} else {
-			fmt.Println("The video URL is not valid or contains an error message. Retrying in 10 seconds...")
 		}
 		time.Sleep(10 * time.Second)
 	}
@@ -167,7 +165,7 @@ func testVideoURL(url string) bool {
 
 	if len(body) < 100 {
 		// Assuming that a very short response is likely to be an error message
-		fmt.Printf("Response body is too short, might be an error message: %s\n", string(body))
+		fmt.Printf("Video is not ready yet, retry after 10 seconds")
 		return false
 	}
 
