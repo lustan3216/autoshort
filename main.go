@@ -4,9 +4,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
+	"time"
 )
 
 // 跑請求前，要先定義的參數
@@ -40,6 +42,23 @@ const (
 	contentType   = "application/json"
 	url           = "https://api.creatomate.com/v1/renders"
 )
+
+func main() {
+	mp4Url := createVideo()
+	description := inputData.Tags + "\n\n" + inputData.Desc
+
+	for {
+		if testVideoURL(mp4Url) {
+			//anotherMethod()
+			log.Println(mp4Url)
+			log.Println(description)
+			break // Exit the loop if the video is valid
+		} else {
+			fmt.Println("The video URL is not valid or contains an error message. Retrying in 10 seconds...")
+		}
+		time.Sleep(10 * time.Second)
+	}
+}
 
 func getTemplateID(storyCount int) string {
 	if val, ok := templateIDs[storyCount]; ok {
@@ -121,20 +140,36 @@ func createVideo() string {
 
 }
 
-func main() {
-	mp4Url := createVideo()
-	description := inputData.Tags + "\n\n" + inputData.Desc
+func testVideoURL(url string) bool {
+	resp, err := http.Get(url)
+	if err != nil {
+		log.Printf("Failed to make request: %v", err)
+		return false
+	}
+	defer resp.Body.Close()
 
-	log.Println(mp4Url)
-	log.Println(description)
-	//r := gin.Default()
+	if resp.StatusCode != http.StatusOK {
+		fmt.Printf("Received non-OK HTTP status: %s\n", resp.Status)
+		return false
+	}
 
-	//r.GET("/ping", func(c *gin.Context) {
-	//
-	//	c.JSON(http.StatusOK, gin.H{
-	//		"message": "pong",
-	//	})
-	//})
-	//
-	//r.Run()
+	contentType := resp.Header.Get("Content-Type")
+	if contentType != "video/mp4" {
+		fmt.Printf("Expected content type 'video/mp4', but got '%s'\n", contentType)
+		return false
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Printf("Failed to read response body: %v", err)
+		return false
+	}
+
+	if len(body) < 100 {
+		// Assuming that a very short response is likely to be an error message
+		fmt.Printf("Response body is too short, might be an error message: %s\n", string(body))
+		return false
+	}
+
+	return true
 }
