@@ -103,7 +103,7 @@ func sendRequest(templateID string, modifications map[string]string) []map[strin
 	return data
 }
 
-func doPost() {
+func createVideo() string {
 	stories := strings.Split(inputData.Stories, "|")
 	storyCount := len(stories)
 
@@ -111,22 +111,22 @@ func doPost() {
 	modifications := createModifications(stories)
 	data := sendRequest(templateID, modifications)
 
-	// 打印解析後的JSON數據
-	fmt.Println(data)
-
-	outputText := inputData.Tags + "\n\n" + inputData.Desc
-
-	// 定義輸出變量
-	output := map[string]interface{}{
-		"data":       data,
-		"outputText": outputText,
+	if len(data) > 0 {
+		if url, ok := data[0]["url"].(string); ok {
+			return url
+		}
 	}
 
-	fmt.Println(output)
+	return ""
+
 }
 
 func main() {
-	doPost()
+	mp4Url := createVideo()
+	description := inputData.Tags + "\n\n" + inputData.Desc
+
+	log.Println(mp4Url)
+	log.Println(description)
 	//r := gin.Default()
 
 	//r.GET("/ping", func(c *gin.Context) {
