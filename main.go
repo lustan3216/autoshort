@@ -48,7 +48,7 @@ func main() {
 
 	for {
 		if testVideoURL(mp4Url) {
-			uploadToYoutube()
+			uploadToYoutube(mp4Url)
 			break // Exit the loop if the video is valid
 		}
 		time.Sleep(10 * time.Second)
