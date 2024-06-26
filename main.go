@@ -1,6 +1,7 @@
 package main
 
 import (
+	"autoshort/functions"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -59,6 +60,13 @@ func uploadToYoutube(mp4Url string) {
 	description := inputData.Tags + "\n\n" + inputData.Desc
 	log.Println(mp4Url)
 	log.Println(description)
+	functions.UploadVideo(
+		mp4Url,
+		inputData.Title,
+		description,
+		"27",
+		inputData.Tags,
+	)
 }
 
 func getTemplateID(storyCount int) string {

@@ -1,6 +1,6 @@
 // Sample Go code for user authorization
 
-package main
+package functions
 
 import (
 	"fmt"
@@ -64,12 +64,12 @@ func UploadVideo(videoUrl string, title string, description string, category str
 
 }
 
-func main() {
-	UploadVideo(
-		"https://cdn.creatomate.com/renders/1179d3de-4a35-4c58-b469-11d54c97e5b3.mp4",
-		"My Video",
-		"This is a test video",
-		"22",
-		"test, video, upload",
-	)
-}
+// func main() {
+// 	UploadVideo(
+// 		"https://cdn.creatomate.com/renders/1179d3de-4a35-4c58-b469-11d54c97e5b3.mp4",
+// 		"My Video",
+// 		"This is a test video",
+// 		"22",
+// 		"test, video, upload",
+// 	)
+// }
